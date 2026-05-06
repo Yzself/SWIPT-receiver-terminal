@@ -1,0 +1,12 @@
+# Claude Code
+.claude/
+
+# STM32CubeIDE build output
+STM32F103/**/Debug/
+STM32F103/**/Release/
+**/.mxproject
+
+# IDE
+.vscode/
+.idea/
+*.ioc.bak
