@@ -42,7 +42,7 @@ Defined in `Core/Src/freertos.c`:
 |------|----------|------|
 | `judgementTask` | Normal (high) | ADC read → matched filter → average filter → Gardner → frame sync → Hamming decode. Also runs coarse/fine beam scanning. |
 | `messageTask` | BelowNormal | Processes decoded messages from `judgementTask` and Bluetooth commands. Uses FreeRTOS Queue Set to multiplex two queues. Drives OLED display. |
-| `powerTask` | BelowNormal | Idle timeout watchdog. Transitions through ACTIVE → DIM → DEEP_SLEEP. |
+| `powerTask` | BelowNormal | Idle timeout watchdog. ACTIVE → DIM (5s) → DEEP_SLEEP/STANDBY (30s). PA0 WKUP pin wakes from STANDBY via RF energy detection, causing MCU reset back to ACTIVE. |
 
 `DefaultTask` initializes all three tasks then terminates (`osThreadTerminate`).
 
