@@ -4,21 +4,21 @@
 #include "main.h"
 #include "cmsis_os2.h"
 
-// µçÔ´×´Ì¬¶¨Òå
+/* Power states */
 typedef enum {
-    POWER_STATE_ACTIVE = 0,  // È«ËÙÔËĞĞ£ºOLEDÁÁ£¬À¶ÑÀÍ¨£¬¸ßÆµ²ÉÑù
-    POWER_STATE_DIM,         // ½ÚÄÜÔËĞĞ£ºOLEDÏ¨ÆÁ£¬À¶ÑÀ¹Ø£¬±£³Ö²ÉÑù½âµ÷
-    POWER_STATE_DEEP_SLEEP   // Éî¶ÈË¯Ãß£º½øÈëSTOPÄ£Ê½£¬½ö±£Áô»½ĞÑ
+    POWER_STATE_ACTIVE = 0,  /* Fully on: OLED, communication, RF sampling */
+    POWER_STATE_DIM,         /* Dimmed: OLED off, peripherals off, sampling continues */
+    POWER_STATE_DEEP_SLEEP   /* Deep sleep: STOP mode, all stopped */
 } PowerState_t;
 
-// ÅäÖÃ³£Á¿
-#define IDLE_TO_DIM_TIME    5000   // 5ÃëÎŞ½»»¥½øÈëDIM×´Ì¬ (Ï¨ÆÁ/¹ØÀ¶ÑÀ)
-#define DIM_TO_SLEEP_TIME   30000  // 30ÃëÎŞÊı¾İ½øÈëDEEP_SLEEP (Í£Ö¹²ÉÑù)
+/* Timeout constants (FreeRTOS ticks @ 1kHz) */
+#define IDLE_TO_DIM_TIME    50000    /* 50s  no activity â†’ DIM */
+#define DIM_TO_SLEEP_TIME   300000   /* 300s no activity â†’ DEEP_SLEEP */
 
-// º¯ÊıÉùÃ÷
+/* API */
 void Power_Init(void);
-void Power_RefreshActivity(void);         // ·¢Éú½»»¥Ê±µ÷ÓÃ£¨ÈçÊÕµ½Ö¸Áî¡¢ÅĞ¾ö³öÊı¾İ£©
-void Power_Manager_Task(void *argument);  // µçÔ´¹ÜÀíÈÎÎñÌõÄ¿
+void Power_RefreshActivity(void);
+void Power_Manager_Task(void *argument);
 PowerState_t Power_GetState(void);
 
 #endif

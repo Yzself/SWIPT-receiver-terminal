@@ -46,9 +46,10 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     BSP/AHT20.c
-    BSP/Bluetooth.c
+    BSP/SubGHz_CC1310.c
     BSP/OLED.c
     BSP/Receiver_ADC.c
+    BSP/Uart_Printf.c
     User/Decoder.c
     User/FrameProcessing.c
     User/Gardner.c

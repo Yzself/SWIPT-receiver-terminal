@@ -36,7 +36,8 @@
 #include "Gardner.h"
 #include "PowerManager.h"
 #include "AHT20.h"
-#include "Bluetooth.h"
+#include "SubGHz_CC1310.h"
+#include "Uart_Printf.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -113,7 +114,8 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
   */
 void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
-
+	Uart_Printf_Init();
+	CC1310_Init();
   /* USER CODE END Init */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -141,8 +143,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of blueToothQueue */
   blueToothQueueHandle = osMessageQueueNew (4, sizeof(uint32_t), &blueToothQueue_attributes);
-
+  
   /* USER CODE BEGIN RTOS_QUEUES */
+  CC1310_Queue_Register(blueToothQueueHandle);
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 
@@ -172,7 +175,7 @@ void StartDefaultTask(void *argument)
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
 	OLED_Hardware_PowerOn();			
-	BT_Open();	
+	CC1310_Open();	
 	// AHT20_Init();
 	OLED_Clear();
 	OLED_ShowString(2,4,"Start Work");
@@ -281,7 +284,7 @@ void judgementTask(void *params)
 					}else{
 						coScanPerCnt = 50;
 						coScanCnt ++;
-						BT_SendPrintf_DMA("ScanCnt:%d",coScanCnt);
+						CC1310_SendPrintf("ScanCnt:%d",coScanCnt);
 						if(coScanNew > coScanMax)
 						{
 							coScanMax = coScanNew;
@@ -292,7 +295,7 @@ void judgementTask(void *params)
 						if(coScanCnt == BEAM_COARSE_SCAN_NUM)
 						{
 							// 粗扫描结束
-							BT_SendPrintf_DMA("CoDone:%d",coScanMaxCnt);
+							CC1310_SendPrintf("CoDone:%d",coScanMaxCnt);
 							coScanMax = 0;
 							coScanMaxCnt = 0;
 							coScanCnt = 0;
@@ -324,10 +327,10 @@ void judgementTask(void *params)
 							
 							if(fineScanCnt < BEAM_CLOSE_SCAN_NUM)
 							{
-								BT_SendPrintf_DMA("GoOn");
+								CC1310_SendPrintf("GoOn");
 							}else{
 								// 细扫描结束
-								BT_SendPrintf_DMA("Done:%d",fineScanMaxCnt);
+								CC1310_SendPrintf("Done:%d",fineScanMaxCnt);
 								fineScanMax = 0;
 								fineScanMaxCnt = 0;
 								fineScanCnt = 0;
@@ -384,11 +387,14 @@ void messageTask(void *params)
 				strcat(displayBuf, str);
 				OLED_Clear();
 				OLED_ShowString(1, 1, displayBuf);
+				printf("%s\r\n", displayBuf);
+
+				CC1310_SendPrintf("ACK:%s", str);
 				/* 蓝牙指令解析状态机 */
 				// 1. 粗扫描触发指令: "Scan Trigger"
 				if (strncmp((char*)pReceivedPtr, "Scan", 4) == 0)
 				{
-					BT_SendString_DMA("Ready");
+					CC1310_SendString("Ready");
 					osDelay(30);  
 					scanFlag = 1;
 					Mode_Change(scanFlag);
@@ -418,14 +424,14 @@ void messageTask(void *params)
 							AHT20_Format_String(msg, temp, humi);
 							
 							// 4. 交互
-							BT_SendString_DMA(msg);
+							CC1310_SendString(msg);
 							OLED_Clear();
 							OLED_ShowString(1, 1, msg);
 						} else {
-							BT_SendString_DMA("AHT20 Read Error");
+							CC1310_SendString("AHT20 Read Error");
 						}
 					} else {
-						BT_SendString_DMA("AHT20 Init Error");
+						CC1310_SendString("AHT20 Init Error");
 					}
 
 					// // 3. 彻底断电，进入极低功耗状态
@@ -459,25 +465,25 @@ void messageTask(void *params)
 							AHT20_Format_String(msg, temp, humi);
 							
 							// 4. 交互
-							BT_SendString_DMA(msg);
+							CC1310_SendString(msg);
 							OLED_Clear();
 							OLED_ShowString(1, 1, msg);
 						} else {
-							BT_SendString_DMA("AHT20 Read Error");
+							CC1310_SendString("AHT20 Read Error");
 						}
 					} else {
-						BT_SendString_DMA("AHT20 Init Error");
+						CC1310_SendString("AHT20 Init Error");
 					}
 				}
 				// 2.波束对准
 				else if(strncmp((char*)pReceivedPtr, "0", 1) == 0 && strlen((char*)pReceivedPtr) == 1)
 				{
-					BT_Open();
+					CC1310_Open();
 				}
 				// 3.关闭蓝牙
 				else if(strncmp((char*)pReceivedPtr, "1", 1) == 0 && strlen((char*)pReceivedPtr) == 1)
 				{
-					BT_Off();
+					CC1310_Sleep();
 				}
 				// 信息处理完毕，开始接收下一条信息
 				Re_ADC_Start();
