@@ -20,8 +20,8 @@ typedef enum {
 } PowerState_t;
 
 /* Timeout constants (FreeRTOS ticks @ 1kHz) */
-#define IDLE_TO_DIM_TIME    50000    /* 50s  no activity → DIM */
-#define DIM_TO_SLEEP_TIME   300000   /* 300s no activity → DEEP_SLEEP */
+#define IDLE_TO_DIM_TIME    5000    /* 5s  no activity → DIM */
+#define DIM_TO_SLEEP_TIME   30000   /* 30s no activity → DEEP_SLEEP */
 
 /* API */
 void Power_Init(void);

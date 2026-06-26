@@ -49,6 +49,9 @@ static void Prepare_For_Sleep(void)
 void Power_Manager_Task(void *argument)
 {
     Power_Init();
+#if !POWER_MANAGER_ENABLE
+    osThreadSuspend(NULL);
+#endif
     for (;;) {
         uint32_t elapsed = osKernelGetTickCount() - lastActivityTick;
 

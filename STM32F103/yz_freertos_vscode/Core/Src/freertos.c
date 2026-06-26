@@ -175,10 +175,10 @@ void StartDefaultTask(void *argument)
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
 	OLED_Hardware_PowerOn();			
-	CC1310_Open();	
-	// AHT20_Init();
 	OLED_Clear();
 	OLED_ShowString(2,4,"Start Work");
+
+	CC1310_Open();
 	// 创建判决任务，要求高实时性
 	judgementTaskCreateReturn = xTaskCreate(judgementTask, "judgementTask", 256, NULL, osPriorityNormal, &judgementTaskHandle);
 	if(judgementTaskCreateReturn != pdPASS) return;
@@ -387,9 +387,8 @@ void messageTask(void *params)
 				strcat(displayBuf, str);
 				OLED_Clear();
 				OLED_ShowString(1, 1, displayBuf);
-				printf("%s\r\n", displayBuf);
+				// printf("%s\r\n", displayBuf);
 
-				CC1310_SendPrintf("ACK:%s", str);
 				/* 蓝牙指令解析状态机 */
 				// 1. 粗扫描触发指令: "Scan Trigger"
 				if (strncmp((char*)pReceivedPtr, "Scan", 4) == 0)
@@ -475,12 +474,12 @@ void messageTask(void *params)
 						CC1310_SendString("AHT20 Init Error");
 					}
 				}
-				// 2.波束对准
+				// 2.开启辅助通信模块
 				else if(strncmp((char*)pReceivedPtr, "0", 1) == 0 && strlen((char*)pReceivedPtr) == 1)
 				{
 					CC1310_Open();
 				}
-				// 3.关闭蓝牙
+				// 3.关闭辅助通信模块
 				else if(strncmp((char*)pReceivedPtr, "1", 1) == 0 && strlen((char*)pReceivedPtr) == 1)
 				{
 					CC1310_Sleep();

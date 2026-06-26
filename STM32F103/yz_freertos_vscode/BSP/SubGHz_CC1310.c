@@ -19,6 +19,9 @@ static uint8_t  cc1310_rx_byte;
 static osMessageQueueId_t cc1310_queue;
 static osMutexId_t        cc1310_mutex;
 
+/* Module open state */
+static bool CC1310_OPEN = false;
+
 /**
 *   @brief Wait for AUX pin to go high, with timeout
 *   @param timeout_ms Timeout in milliseconds
@@ -78,6 +81,10 @@ void CC1310_Queue_Register(osMessageQueueId_t queue)
 */
 void CC1310_Open(void)
 {
+    if(CC1310_OPEN)
+        return;
+
+    /* Create mutex if not already created */
     if (cc1310_mutex == NULL)
         cc1310_mutex = osMutexNew(NULL);
 
@@ -87,6 +94,8 @@ void CC1310_Open(void)
     /* Flush RX state and start interrupt receive */
     cc1310_rx_idx = 0;
     HAL_UART_Receive_IT(&huart1, &cc1310_rx_byte, 1);
+
+    CC1310_OPEN = true;
 }
 
 /**
@@ -94,6 +103,9 @@ void CC1310_Open(void)
 */
 void CC1310_Sleep(void)
 {
+    if(!CC1310_OPEN)
+        return;
+
     /* Abort any ongoing UART transfer/receive */
     while (huart1.gState != HAL_UART_STATE_READY);
     HAL_UART_AbortReceive(&huart1);
@@ -103,6 +115,11 @@ void CC1310_Sleep(void)
 
     /* Flush local state */
     cc1310_rx_idx = 0;
+    if (cc1310_mutex != NULL) {
+        osMutexRelease(cc1310_mutex);
+    }
+    
+    CC1310_OPEN = false;
 }
 
 /**
@@ -169,7 +186,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         cc1310_rx_idx++;
         if (cc1310_rx_idx >= CC1310_RX_BUF_SIZE) {
             cc1310_rx_idx = 0;
-            memset(cc1310_rx_buf, 0, CC1310_RX_BUF_SIZE);
         }
     }
 
