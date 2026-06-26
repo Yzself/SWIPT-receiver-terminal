@@ -1,3 +1,10 @@
+/**
+ * @file    OLED.c
+ * @brief   SSD1306 OLED display driver
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "OLED.h"
 #include "OLED_Font.h"
 #include "gpio.h"

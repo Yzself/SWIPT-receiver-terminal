@@ -1,3 +1,10 @@
+/**
+ * @file    Uart_Printf.c
+ * @brief   UART2 printf redirection with FreeRTOS mutex
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "Uart_Printf.h"
 #include "usart.h"
 #include "cmsis_os2.h"

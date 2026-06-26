@@ -1,3 +1,10 @@
+/**
+ * @file    PowerManager.c
+ * @brief   Power management state machine (ACTIVE/DIM/SLEEP)
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "PowerManager.h"
 #include "OLED.h"
 #include "SubGHz_CC1310.h"

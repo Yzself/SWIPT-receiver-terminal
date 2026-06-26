@@ -1,3 +1,10 @@
+/**
+ * @file    FrameProcessing.c
+ * @brief   Frame synchronization and data extraction
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "FrameProcessing.h"
 #include "Decoder.h"
 #include "PowerManager.h"

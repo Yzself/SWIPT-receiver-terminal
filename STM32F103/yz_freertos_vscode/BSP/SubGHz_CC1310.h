@@ -1,6 +1,14 @@
 #ifndef __SUBGHZ_CC1310_H
 #define __SUBGHZ_CC1310_H
 
+/**
+ * @file    SubGHz_CC1310.h
+ * @brief   E70-433T CC1310 Sub-GHz module interface
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
+
 #include "cmsis_os2.h"
 #include "usart.h"
 #include "main.h"

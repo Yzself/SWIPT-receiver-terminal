@@ -1,3 +1,10 @@
+/**
+ * @file    Gardner.c
+ * @brief   Gardner timing recovery algorithm
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "Gardner.h"
 #include <math.h>
 

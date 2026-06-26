@@ -1,3 +1,10 @@
+/**
+ * @file    Receiver_ADC.c
+ * @brief   ADC receiver with TIM-triggered DMA and queue
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "Receiver_ADC.h"
 
 volatile static uint16_t adc_buf;

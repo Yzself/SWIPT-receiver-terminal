@@ -1,3 +1,10 @@
+/**
+ * @file    SubGHz_CC1310.c
+ * @brief   E70-433T CC1310 Sub-GHz module driver
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "SubGHz_CC1310.h"
 
 #define CC1310_AUX_READ() HAL_GPIO_ReadPin(AUX_GPIO_Port, AUX_Pin)
@@ -12,6 +19,11 @@ static uint8_t  cc1310_rx_byte;
 static osMessageQueueId_t cc1310_queue;
 static osMutexId_t        cc1310_mutex;
 
+/**
+*   @brief Wait for AUX pin to go high, with timeout
+*   @param timeout_ms Timeout in milliseconds
+*   @return true if AUX went high, false if timeout occurred
+*/
 static bool CC1310_WaitAux(uint32_t timeout_ms)
 {
     uint32_t start = HAL_GetTick();
@@ -23,6 +35,10 @@ static bool CC1310_WaitAux(uint32_t timeout_ms)
     return true;
 }
 
+/**
+*   @brief Set the mode of the CC1310 module
+*   @param mode The mode to set (CC1310_Mode_t)
+*/
 void CC1310_SetMode(CC1310_Mode_t mode)
 {
     /* Per manual: mode switch valid only when AUX=1 */
@@ -40,16 +56,26 @@ void CC1310_SetMode(CC1310_Mode_t mode)
     osDelay(2);
 }
 
+/**
+*   @brief Initialize the CC1310 module
+*/
 void CC1310_Init(void)
 {
     cc1310_mutex = osMutexNew(NULL);
 }
 
+/**
+*   @brief Register a message queue for receiving messages from the CC1310 module
+*   @param queue The message queue to register
+*/
 void CC1310_Queue_Register(osMessageQueueId_t queue)
 {
     cc1310_queue = queue;
 }
 
+/**
+*   @brief Put the CC1310 module to run mode (continuous transparent mode)
+*/
 void CC1310_Open(void)
 {
     if (cc1310_mutex == NULL)
@@ -63,6 +89,9 @@ void CC1310_Open(void)
     HAL_UART_Receive_IT(&huart1, &cc1310_rx_byte, 1);
 }
 
+/**
+*   @brief Put the CC1310 module to sleep mode (low power)
+*/
 void CC1310_Sleep(void)
 {
     /* Abort any ongoing UART transfer/receive */
@@ -76,6 +105,10 @@ void CC1310_Sleep(void)
     cc1310_rx_idx = 0;
 }
 
+/**
+*   @brief Send a string through the CC1310 module
+*   @param str The string to send
+*/
 void CC1310_SendString(char *str)
 {
     if (!CC1310_WaitAux(100)) return;
@@ -86,6 +119,11 @@ void CC1310_SendString(char *str)
     osMutexRelease(cc1310_mutex);
 }
 
+/**
+*   @brief Send a formatted string through the CC1310 module
+*   @param format The format string
+*   @param ... The arguments for the format string
+*/
 void CC1310_SendPrintf(const char *format, ...)
 {
     if (!CC1310_WaitAux(100)) return;

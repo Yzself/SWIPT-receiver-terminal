@@ -1,5 +1,13 @@
 #ifndef __GARDNER_H
 #define __GARDNER_H
+
+/**
+ * @file    Gardner.h
+ * @brief   Gardner timing recovery interface
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "main.h"
 #include "Global_Define.h"
 

@@ -1,6 +1,14 @@
 #ifndef __OLED_H
 #define __OLED_H
 
+/**
+ * @file    OLED.h
+ * @brief   SSD1306 OLED display interface
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
+
 #include "main.h"
 #include "i2c.h"  
 #include "cmsis_os2.h"

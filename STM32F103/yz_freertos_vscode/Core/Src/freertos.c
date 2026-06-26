@@ -86,10 +86,10 @@ osMessageQueueId_t messageQueueHandle;
 const osMessageQueueAttr_t messageQueue_attributes = {
   .name = "messageQueue"
 };
-/* Definitions for blueToothQueue */
-osMessageQueueId_t blueToothQueueHandle;
-const osMessageQueueAttr_t blueToothQueue_attributes = {
-  .name = "blueToothQueue"
+/* Definitions for subMessageQueue */
+osMessageQueueId_t subMessageQueueHandle;
+const osMessageQueueAttr_t subMessageQueue_attributes = {
+  .name = "subMessageQueue"
 };
 /* Definitions for fineScanSem */
 osSemaphoreId_t fineScanSemHandle;
@@ -141,11 +141,11 @@ void MX_FREERTOS_Init(void) {
   /* creation of messageQueue */
   messageQueueHandle = osMessageQueueNew (4, sizeof(uint32_t), &messageQueue_attributes);
 
-  /* creation of blueToothQueue */
-  blueToothQueueHandle = osMessageQueueNew (4, sizeof(uint32_t), &blueToothQueue_attributes);
-  
+  /* creation of subMessageQueue */
+  subMessageQueueHandle = osMessageQueueNew (4, sizeof(uint32_t), &subMessageQueue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
-  CC1310_Queue_Register(blueToothQueueHandle);
+  CC1310_Queue_Register(subMessageQueueHandle);
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 
@@ -370,15 +370,15 @@ void messageTask(void *params)
 	//创建队列集(原生函数，引入头文件queue.h，同时保证configUSE_QUEUE_SETS为1)
 	masterQueueSet = xQueueCreateSet(4 + 4);
 	xQueueAddToSet((QueueHandle_t)messageQueueHandle, masterQueueSet);
-	xQueueAddToSet((QueueHandle_t)blueToothQueueHandle, masterQueueSet);
+	xQueueAddToSet((QueueHandle_t)subMessageQueueHandle, masterQueueSet);
 	while(1)
 	{
 		// 监听消息队列
     	QueueSetMemberHandle_t activatedMember = xQueueSelectFromSet(masterQueueSet, portMAX_DELAY);
 		
-		if (activatedMember == (QueueSetMemberHandle_t)blueToothQueueHandle)	// 蓝牙消息处理
+		if (activatedMember == (QueueSetMemberHandle_t)subMessageQueueHandle)	// 辅助消息处理
 		{
-			if (osMessageQueueGet(blueToothQueueHandle, &pReceivedPtr, NULL, 0) == osOK)
+			if (osMessageQueueGet(subMessageQueueHandle, &pReceivedPtr, NULL, 0) == osOK)
       		{
 				Power_RefreshActivity();
 				// OLED 显示

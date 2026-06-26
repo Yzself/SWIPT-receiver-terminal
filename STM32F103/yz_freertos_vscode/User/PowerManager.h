@@ -1,6 +1,14 @@
 #ifndef __POWER_MANAGER_H
 #define __POWER_MANAGER_H
 
+/**
+ * @file    PowerManager.h
+ * @brief   Power management state machine interface
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
+
 #include "main.h"
 #include "cmsis_os2.h"
 

@@ -1,6 +1,14 @@
 #ifndef __AHT20_H
 #define __AHT20_H
 
+/**
+ * @file    AHT20.h
+ * @brief   AHT20 temperature and humidity sensor interface
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
+
 #include "main.h"
 
 // AHT20 I2C 7位地址为 0x38，HAL库需要左移一位

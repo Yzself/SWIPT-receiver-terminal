@@ -1,3 +1,10 @@
+/**
+ * @file    Decoder.c
+ * @brief   Hamming(7,4) decoder
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "Decoder.h"
 
 //**********************************************************************

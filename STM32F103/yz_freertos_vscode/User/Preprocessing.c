@@ -1,3 +1,10 @@
+/**
+ * @file    Preprocessing.c
+ * @brief   Matched filter and moving average filter
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "Preprocessing.h"
 
 

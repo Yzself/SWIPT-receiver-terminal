@@ -1,3 +1,10 @@
+/**
+ * @file    AHT20.c
+ * @brief   AHT20 temperature and humidity sensor driver
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "AHT20.h"
 #include "i2c.h"
 #include <stdio.h>

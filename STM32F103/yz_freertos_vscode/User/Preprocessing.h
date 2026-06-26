@@ -1,5 +1,13 @@
 #ifndef __PREPROCESSING_H
 #define __PREPROCESSING_H
+
+/**
+ * @file    Preprocessing.h
+ * @brief   Matched filter and moving average filter interface
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
 #include "Global_Define.h"
 #include "main.h"
 

@@ -1,6 +1,14 @@
 #ifndef __RECEIVER_ADC_H
 #define __RECEIVER_ADC_H
 
+/**
+ * @file    Receiver_ADC.h
+ * @brief   ADC receiver interface
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
+
+
 #include "adc.h"  
 #include "tim.h"
 #include "cmsis_os2.h"

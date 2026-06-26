@@ -1,5 +1,11 @@
 #ifndef __GLOBAL_DEFINE_H
 #define __GLOBAL_DEFINE_H
+/**
+ * @file    Global_Define.h
+ * @brief   Global constants, parameters and shared declarations
+ * @author  YuZhang Lin
+ * @date    2026-06-26
+ */
 
 #include <stdbool.h>
 #include <stdint.h>
