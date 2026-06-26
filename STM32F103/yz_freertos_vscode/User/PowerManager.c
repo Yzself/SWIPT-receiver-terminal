@@ -49,9 +49,7 @@ static void Prepare_For_Sleep(void)
 void Power_Manager_Task(void *argument)
 {
     Power_Init();
-#if !POWER_MANAGER_ENABLE
-    osThreadSuspend(NULL);
-#endif
+#if POWER_MANAGER_ENABLE
     for (;;) {
         uint32_t elapsed = osKernelGetTickCount() - lastActivityTick;
 
@@ -78,4 +76,9 @@ void Power_Manager_Task(void *argument)
         }
         osDelay(500);
     }
+#else
+    for (;;) {
+        osDelay(5000);
+    }
+#endif
 }

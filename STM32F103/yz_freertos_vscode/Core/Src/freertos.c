@@ -176,7 +176,14 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
 	OLED_Hardware_PowerOn();			
 	OLED_Clear();
-	OLED_ShowString(2,4,"Start Work");
+	OLED_ShowString(2,4,"PowerManager");
+	if(POWER_MANAGER_ENABLE)
+	{
+		OLED_ShowString(3,4,"Open");
+	}else{
+		
+		OLED_ShowString(3,4,"Close");
+	}
 
 	CC1310_Open();
 	// 创建判决任务，要求高实时性
