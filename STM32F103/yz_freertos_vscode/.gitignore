@@ -1,3 +1,10 @@
 build
 mx.scratch
 !.settings
+
+# STM32CubeMX generated/temp files
+.mxproject
+*.ftl
+*.ftl_save
+*_save
+MXTmpFiles/
