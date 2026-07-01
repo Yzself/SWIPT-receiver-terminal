@@ -394,8 +394,9 @@ void messageTask(void *params)
 				strcat(displayBuf, str);
 				OLED_Clear();
 				OLED_ShowString(1, 1, displayBuf);
-				// printf("%s\r\n", displayBuf);
-
+				//printf("%s\r\n", displayBuf);
+				CC1310_SendPrintf("Bt:%s", str);
+				
 				/* 蓝牙指令解析状态机 */
 				// 1. 粗扫描触发指令: "Scan Trigger"
 				if (strncmp((char*)pReceivedPtr, "Scan", 4) == 0)
